@@ -9,8 +9,8 @@ router = routers.DefaultRouter()
 
 
 urlpatterns = [
+    path('', include('carcompany_app.urls')),
     url(r'^admin/', admin.site.urls),
-    #path(r'^api/', include('carcompany_app.api.urls', namespace='carcompany_app'))
-    #http://127.0.0.1:8000/api/cars
-    path('api/', include('carcompany_app.api.urls'))
+    path('api/', include('carcompany_app.api.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     ]

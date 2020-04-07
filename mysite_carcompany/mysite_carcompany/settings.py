@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from django.urls import reverse_lazy
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'carcompany_app',
-    'rest_framework'
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'mysite_carcompany.urls'
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'mysite_carcompany.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,3 +131,11 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+LOGIN_REDIRECT_URL = '/'
+"""
+LOGIN_REDIRECT_URL = reverse_lazy('dashboard') # Сообщает о том, на какой URL-адрес перенаправлять пользователя после
+# входа в систему.
+LOGIN_URL = reverse_lazy('login') # URL-адрес для перенаправления пользователя на вход (с помощью декоратора l
+# ogin_required)
+LOGOUT_URL = reverse_lazy('logout') # URL-адрес для перенаправления пользователя на выход
+"""
