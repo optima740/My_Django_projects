@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>carcompany_app</title>
+    </head>
+    <body>
+         {% block sidebar %}
+         {% if user.is_authenticated %}
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+         {% else %}
+            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+         {% endif %}
+         {% endblock %}
+         {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+        <div>
+            <h1>{{ username }}</h1>
+        </div>
+         <div>
+            <h2>{{ enterprise }}</h2>
+        </div>
+        <div>
+            {% for m in manager %}
+                <h3>{{ m }}</h3>
+            {% endfor %}
+        </div>
+
+
+
+    </body>
+</html>

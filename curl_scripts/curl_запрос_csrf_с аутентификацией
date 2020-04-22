@@ -1,0 +1,9 @@
+запуск командной строки от имени админа!!!
+_____________________________________________________________________
+curl -c cookie.txt http://127.0.0.1:8000/accounts/login/
+
+curl --cookie cookie.txt http://127.0.0.1:8000/accounts/login/ -H "X-CSRFToken: owPT8worwO0Bd8AEfqUg1FB2NIPkEQ8DHoJ0kAVPUm1hsSrMS0y0AT7T6qsUNqXa" -b "csrftoken=owPT8worwO0Bd8AEfqUg1FB2NIPkEQ8DHoJ0kAVPUm1hsSrMS0y0AT7T6qsUNqXa" -d "username=manager1&password=Qwertyu_123&next=" -c cookie.txt
+
+curl --cookie cookie.txt -v http://127.0.0.1:8000/api/cars/
+______________________________________________________________________
+

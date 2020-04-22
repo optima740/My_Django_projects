@@ -1,33 +1,46 @@
-from rest_framework import generics
+from rest_framework import generics, request
+from rest_framework.request import Request
+from rest_framework.mixins import ListModelMixin
 from .serialazers import CarSerializer
-from django.shortcuts import get_object_or_404 # обработка исключений в случае ошибки
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authentication import BasicAuthentication # для обработки аутентификации
-from rest_framework.permissions import IsAuthenticated # для добавления разрешений для представлений
-from ..models import Car, Enterprise
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin # миксин для доступа аутентифицированным пользователям
+from django.contrib.auth import *
+from django.contrib.auth.decorators import login_required
+from ..models import Car, Enterprise, User, Manager
 
-class CarListView(generics.ListAPIView):
+
+class CarListView(LoginRequiredMixin, generics.ListAPIView, ListModelMixin):
     # визуализатор Llist для модели Car
+    def get_queryset(self):
+        user_name = self.request.user.username
+        list_car = Car.objects.all()
+        if user_name != 'admin':
+            enterprise = Enterprise.objects.get(manager__username__contains=user_name)
+            list_car = Car.objects.filter(of_enterprise=enterprise)
+        return list_car
+
+
+    queryset = get_queryset
+    serializer_class = CarSerializer
+    raise_exception = True  # переопределение поля исключения, в случае не аутентифицированного пользователя
+
+class CarDetailView(LoginRequiredMixin, generics.ListAPIView, ListModelMixin):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+    raise_exception = True  # переопределение поля исключения, в случае не аутентифицированного пользователя
+
+from django.shortcuts import render
 
 
-class CarDetailView(generics.RetrieveAPIView):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
+def TestUserViews(request):
 
-class EnterpriseEnrollView(APIView):
-    # представление класса APIView для добавления сотрудников в предприятие (enterprise)
-    authentication_classes = (BasicAuthentication,) # базовая аутентификация для сотрудников
-    permission_classes = (IsAuthenticated,) # запрет доступа анонимных пользователей (не прошедших аутентификацию) к
-    # данному представлению (классу)
-    
+    user_name = request.user.username
+    manager = Manager.objects.filter(username=user_name)
+    enterprise = Enterprise.objects.get(manager__username__contains=user_name)
+    context = {
+        'username': request.user.username,
+        'manager': manager,
+        'enterprise': enterprise
+        #'enterprise': enterprise,
 
-    def post(self, request, pk, format=None):
-        # для обработки POST запроса. Для данного метода запрещены все остальные глаголы HTTP, кроме POST
-        # ожидаем идентификатор предприятия (enterprise) pk, находим предприятие по данноу идентификатору.
-        enterprise = get_object_or_404(Enterprise, pk=pk) # если предприятие не найдено по pk, вызывается исключение 404.
-        enterprise.managers.add(request.user)
-        return Response({'enrolled': True})
-
+    }
+    return render(request, 'Test.html', context)

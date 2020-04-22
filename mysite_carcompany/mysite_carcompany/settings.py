@@ -132,6 +132,7 @@ REST_FRAMEWORK = {
     ]
 }
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 """
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard') # Сообщает о том, на какой URL-адрес перенаправлять пользователя после
 # входа в систему.

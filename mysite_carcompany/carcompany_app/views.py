@@ -7,9 +7,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
-
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    return render(request, 'carcompany_app/index.html')
+    return render(request, 'index.html')
+
+
+
+
 
