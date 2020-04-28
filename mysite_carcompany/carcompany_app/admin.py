@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import *
 
+
+
 class DriverAdmin(admin.ModelAdmin):
 
     class Meta:

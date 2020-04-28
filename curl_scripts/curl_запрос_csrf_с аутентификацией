@@ -2,8 +2,20 @@
 _____________________________________________________________________
 curl -c cookie.txt http://127.0.0.1:8000/accounts/login/
 
-curl --cookie cookie.txt http://127.0.0.1:8000/accounts/login/ -H "X-CSRFToken: owPT8worwO0Bd8AEfqUg1FB2NIPkEQ8DHoJ0kAVPUm1hsSrMS0y0AT7T6qsUNqXa" -b "csrftoken=owPT8worwO0Bd8AEfqUg1FB2NIPkEQ8DHoJ0kAVPUm1hsSrMS0y0AT7T6qsUNqXa" -d "username=manager1&password=Qwertyu_123&next=" -c cookie.txt
+curl --cookie cookie.txt http://127.0.0.1:8000/accounts/login/ -H "X-CSRFToken: QvWNBYnVfx9cnqzWib99l7IWmQJ7jdrTCIpcwaiYVTSfFWknjHV1hQTfq6f6le8u" -b "csrftoken=QvWNBYnVfx9cnqzWib99l7IWmQJ7jdrTCIpcwaiYVTSfFWknjHV1hQTfq6f6le8u" -d "username=manager1&password=Qwertyu_123&next=" -c cookie.txt
 
 curl --cookie cookie.txt -v http://127.0.0.1:8000/api/cars/
 ______________________________________________________________________
 
+POST запрос на создание с передачей JSON словаря из каталога C:\
+______________________________________________________________________
+curl --cookie cookie.txt -v http://127.0.0.1:8000/api/cars/ -H "X-CSRFToken: QvWNBYnVfx9cnqzWib99l7IWmQJ7jdrTCIpcwaiYVTSfFWknjHV1hQTfq6f6le8u" -H 'Accept: application/json'  -H "Content-Type: application/json" -b "csrftoken=QvWNBYnVfx9cnqzWib99l7IWmQJ7jdrTCIpcwaiYVTSfFWknjHV1hQTfq6f6le8u" -d @dict_new_car.json -c cookie.txt
+
+{"new_car":{
+    "brand": "OpEl",
+    "model": "Astra",
+    "color": "Red",
+    "fuel_util": "11",
+    "of_enterprise": 1
+}}
+_________________________________________________________________________
