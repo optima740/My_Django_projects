@@ -4,6 +4,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('UIenterprise/', views.UIenterprise, name='UIenterprise'),
+
+
 
 
 ]

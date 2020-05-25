@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'carcompany_app',
     'rest_framework',
+    'reset_migrations',
+    'crispy_forms',
 
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 
 ]
 
@@ -129,10 +134,13 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    # глобальная настройка для стиля пагинации с указанием количества элементов на странице PAGE_SIZE
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 5,
 }
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/api/cars/'
+#LOGIN_URL = '/api/cars/'
 """
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard') # Сообщает о том, на какой URL-адрес перенаправлять пользователя после
 # входа в систему.

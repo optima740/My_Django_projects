@@ -8,10 +8,17 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.contrib.auth.decorators import login_required
-
+from .api.views import *
 
 def index(request):
-    return render(request, 'index.html')
+
+
+    return render(request, 'index.html', locals())
+
+def UIenterprise(request):
+    return render(request, 'UIenterprise.html')
+
+
 
 
 

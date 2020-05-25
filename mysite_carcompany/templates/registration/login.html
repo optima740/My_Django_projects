@@ -1,37 +1,105 @@
-{% extends "base_generic.html" %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>CarCompany_login</title>
+          <!-- Кодировка веб-страницы -->
+          <meta charset="utf-8">
+          <!-- Настройка viewport -->
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block content %}
+          <!-- Подключаем Bootstrap CSS -->
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+          <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+          <script type="text/javascript" src="static/js/main.js"></script>
+      </head>
+      <body>
+      <div class="general-container">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+                                 <!-- Brand -->
+                                 <a class="navbar-brand" href="/">Главная</a>
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
-  
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-  
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-  
-  {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-  
-{% endblock %}
+                                 <!-- Toggler/collapsibe Button -->
+                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                    <span class="navbar-toggler-icon"></span>
+                                 </button>
+
+                                 <!-- Navbar links -->
+                                 <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                                    <ul class="navbar-nav">
+                                       <li class="nav-item">
+                                          <a class="navbar-brand" href="/admin/">Управление</a>
+                                       </li>
+                                       <li class="nav-item ">
+                                            <!-- Логин -->
+                                            {% if user.is_authenticated %}
+
+                                                <a class="navbar-brand"> User: {{ user.get_username }} </a>
+
+
+                                                <a class="navbar-brand" href="{% url 'logout'%}?next={{request.path}}">Logout</a>
+
+                                            {% else %}
+
+                                                <a class="navbar-brand" href="{% url 'login'%}?next={{request.path}}">Login</a>
+
+                                            {% endif %}
+
+                                       </li>
+
+                                    </ul>
+                                 </div>
+                              </nav>
+
+
+        <div class="container">
+
+                <div class="row">
+                    <div class="col" align="center">
+                            {% if form.errors %}
+                            <p>Your username and password didn't match. Please try again.</p>
+                            {% endif %}
+
+                            {% if next %}
+                                {% if user.is_authenticated %}
+                                    <p>Your account doesn't have access to this page. To proceed,
+                                    please login with an account that has access.</p>
+                                {% else %}
+                                    <p >Please login to see this page.</p>
+                                {% endif %}
+                            {% endif %}
+
+                            <form method="post" action="{% url 'login' %}">
+                            {% csrf_token %}
+
+                                <table>
+
+                                <tr>
+                                  <td>{{ form.username.label_tag }}</td>
+                                  <td>{{ form.username }}</td>
+                                </tr>
+
+                                <tr>
+                                  <td>{{ form.password.label_tag }}</td>
+                                  <td>{{ form.password }}</td>
+                                </tr>
+
+
+                                </table>
+
+                              <font color="#3AC1EF"><button class="btn btn-outline-secondary">login</button></font>
+                            <input type="hidden" name="next" value="{{ next }}" />
+                            </form>
+
+                            {# Assumes you setup the password_reset view in your URLconf #}
+                            <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+                    </div>
+                </div>
+
+        </div>
+
+      </div>
+      <div class="footer text-center">
+            <p>My application -- CarCompany</p>
+      </div>
+    </body>
+</html>

@@ -1,0 +1,98 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+<!-- Автомобили -->
+            <div class="general-container">
+
+                    <div class="col-md-12 text-left">
+                        <div class="col-md-10">
+                            <div class="col-md-4">
+                                <a href="/" class="btn btn-secondary btn-sm" role="button" aria-pressed="true"> Назад</a>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <h3>Ваш автопарк:</h3>
+                            </div>
+                        </div>
+                        <!-- Итерация списка автомобилей -->
+                        {% for item in result %}
+                            <div class="col-md-10">
+                                <p>ID: {{ item.id }} - {{ item.brand }} {{ item.model }} - Цвет: {{ item.color }}  </p>
+                            </div>
+                        {% endfor %}
+                    <!-- Пагинация -->
+                        <div class="col-md-10 text-center">
+                            {% if result.has_previous %}
+                            <a href="?page={{ result.previous_page_number }}">←</a>
+                            {% endif %}
+
+                            {% for num in result.paginator.page_range %}
+                                {% if num == result.number %}
+                                    <span class="current"><b>{{ num }}</b></span>
+                                {% else %}
+                                    <a href="?page={{ num }}"> {{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if UIcars.has_next %}
+                                <a href="?page={{ UIcars.next_page_number }}">→</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                           <div class="col-md-12 text-center">
+                                <h3>Добавить автомобиль:</h3>
+                           </div>
+                           <div class="col-md-10">
+                                <form  action="" method="post"  class="form-horizontal" novalidate="">{% csrf_token %}
+                                  <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                              Brand
+                                            </div>
+                                            <div class="col-sm-6 ">
+                                                <input name="brand" class="form-control" type="text" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                              Model
+                                            </div>
+                                            <div class="col-sm-6 ">
+                                                <input name="model" class="form-control" type="text" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                              Color
+                                            </div>
+                                            <div class="col-sm-6 ">
+                                                <input name="color" class="form-control" type="text" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-sm-6">
+                                              Fuel util
+                                            </label>
+                                            <div class="col-sm-6 ">
+                                                <input name="fuel_util" class="form-control" type="text" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                Of enterprise
+                                            </div>
+                                            <div class="col-sm-6 ">
+                                                <input name="of_enterprise" class="form-control" type="text" value="">
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                        <div class="row offset-6">
+                                            <button class="btn btn-primary js-tooltip" title="" data-original-title="">Добавить</button>
+                                        </div>
+                                  </fieldset>
+                                </form>
+                           </div>
+                        </div>
+                    </div>
+
+            </div>
+{% endblock %}

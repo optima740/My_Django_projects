@@ -8,23 +8,13 @@ class Enterprise(models.Model):
     address = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.title
-"""
-class User(models.Model):
-    GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'),)
-    name = models.CharField(max_length=100)
-    age = models.CharField(max_length=2)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='M')
-    enterprise = models.ForeignKey('Enterprise', on_delete=models.SET_NULL, null=True)
+        return '%s, %s' % (self.title, self.address)
 
-    def __str__(self):
-        return self.name
-"""
 class Car(models.Model):
     brand = models.CharField(max_length=32)
     model = models.CharField(max_length=32)
     color = models.CharField(max_length=16)
-    fuel_util = models.CharField(max_length=3)
+    fuel_util = models.CharField(max_length=5)
     date_assembly = models.DateField(auto_now_add=True)
     of_enterprise = models.ForeignKey('Enterprise', on_delete=models.SET_NULL, null=True)
 

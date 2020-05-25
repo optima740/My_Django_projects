@@ -1,28 +1,36 @@
-<html>
-    <head>
-        <title>carcompany_app</title>
-    </head>
-    <body>
-         {% block sidebar %}
-         {% if user.is_authenticated %}
-            <li>User: {{ user.get_username }}</li>
-            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-         {% else %}
-            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-         {% endif %}
-         {% endblock %}
-         {% block content %}<!-- default content text (typically empty) -->{% endblock %}
-        <div>
-            <h1><a href="/">АВТОПАРК</a></h1>
-        </div>
+{% extends "base_generic.html" %}
 
-        <div>
-            <h2><a href="/api/cars/">Доступные автомобили</a></h2>
-            <p></p>
-        </div>
-        <div>
-            <h2><a href="admin/">Администрирование</a></h2>
-            <p></p>
-        </div>
-    </body>
-</html>
+{% block content %}
+
+
+<div class="row justify-content-center">
+    <dl>
+        {% if not user.is_authenticated %}
+        <dt>
+            <h3 >Для доступа, пожалуйста, авторизуйтесь.</h3>
+        </dt>
+        {% else %}
+        <dt>
+
+            <h1><a href="/api/enterprise/" class="btn btn-secondary btn-lg" role="button" aria-pressed="true">Ваше предприятие</a></h1>
+
+
+        </dt>
+        <dt>
+
+            <h1><a href="/api/cars/" class="btn btn-secondary btn-lg" role="button" aria-pressed="true">Автопарк</a></h1>
+
+        </dt>
+        <dt>
+
+            <h1><a href="/api/edit_cars/0" class="btn btn-secondary btn-lg" role="button" aria-pressed="true">Редактировать</a></h1>
+
+
+        </dt>
+
+
+        {% endif %}
+    </dl>
+</div>
+
+{% endblock %}

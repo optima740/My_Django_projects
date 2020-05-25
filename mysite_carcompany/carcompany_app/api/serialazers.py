@@ -1,11 +1,22 @@
 from rest_framework import serializers
-from ..models import Car
+from ..models import Car, Enterprise
 
 class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ('id', 'brand', 'model', 'color', 'fuel_util', 'date_assembly', 'of_enterprise')
-"""
+
+class EnterpriseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enterprise
+        fields = ('id', 'title', 'address')
+
+        """
+        id = serializers.CharField()
+        title = serializers.CharField()
+        address = serializers.CharField()
+
+    
     def create(self, validated_data):
         return Car.objects.create(**validated_data)
 
