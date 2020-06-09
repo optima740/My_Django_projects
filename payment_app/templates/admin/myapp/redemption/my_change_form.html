@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+<h1>hello!</h1>
+{% block submit_buttons_bottom %}
+
+    <form action="redemption_to/" method="get">
+    {% csrf_token %}
+        <input type="submit" value="Выплата" />
+        <button class="btn btn-danger" title="" data-original-title="">Выплата</button>
+    </form>
+
+{{ block.super }}
+
+{% endblock %}
