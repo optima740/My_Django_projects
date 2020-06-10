@@ -9,8 +9,13 @@ from .models import *
 
 
 def redemption_view(request):
-    username = Redemption.customer.username
-    balance = Redemption.customer.award
-    result = {'username': username, 'balance': balance}
-    return render(request, 'index.html', result)
+    username = 'AA'
+    balance = 1000
+    sizepay = ''
+    if request.method == 'POST':
+        sizepay = request.POST.get('sizepay')
+
+    #sizepay = request.POST.get('sizepay')
+    result = {'username': username, 'balance': balance, 'sizepay': sizepay }
+    return render(request, 'index.html', locals())
 

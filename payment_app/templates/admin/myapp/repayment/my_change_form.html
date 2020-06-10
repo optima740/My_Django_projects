@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+
+    <input value="GET REPAYMENT" type="button" onclick="location.href='{% url 'admin:repayment_view' %}'" />
+
+{{ block.super }}
+
+{% endblock %}

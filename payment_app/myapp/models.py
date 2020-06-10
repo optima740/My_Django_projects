@@ -16,6 +16,10 @@ class Customer(User):
     def cashback(self, summ):
         self.award += summ
         self.save()
+    def change_balance(self, value):
+
+        self.award -= value
+        self.save()
 
     def save(self, *args, **kwargs):
         self.award = round(self.award, 2)
@@ -42,16 +46,20 @@ class Pay(models.Model):
     def __str__(self):
         return '%s, %s, %s' % (self.author, self.payment_summ, self.date)
 
-class Redemption(models.Model):
+class Repayment(models.Model):
     class Meta:
-        verbose_name = 'Redemption'
-        verbose_name_plural = 'Redemptions'
+        verbose_name = 'Repayment'
+        verbose_name_plural = 'Repayments'
     customer = models.ForeignKey('Customer', on_delete=models.SET_NULL, null=True, blank=True)
     payment_summ = models.FloatField(max_length=16, blank=True)
     create_data = models.DateTimeField(auto_now_add=True, auto_now=False)
     processing_date = models.DateTimeField(auto_now_add=False, auto_now=True)
     status = models.BooleanField(default=False, blank=True)
     account_number = models.CharField(max_length=32, blank=True)
+
+
+    def create_repayment(self, customer, summ):
+        pass
 
     def __str__(self):
         return '%s, %s, %s, %s, %s, %s' % (self.customer, self.payment_summ, self.create_data, self.processing_date,

@@ -6,7 +6,7 @@ from django.urls import path
 from django.conf.urls import url
 
 urlpatterns = [
-    path('', include('myapp.urls')),
+    path('admin/myapp/redemption/', include('myapp.urls')),
     url(r'^admin/', admin.site.urls),
 
 ]

@@ -5,14 +5,43 @@
 
 <div class="row justify-content-center">
     <dl>
-
         <dt>
+            <h3>User: {{result.username}}</h3>
+            <h3>Balance: {{result.balance.award}}</h3>
+        </dt>
+        <dt>
+            <div class="row offset-4">
+                <form  action="/admin/myapp/repayment/" method="get"  class="form-horizontal" novalidate="">
 
-            <h1>Пользователь: {{ result.username }}</h1>
-
-
+                <button class="btn btn-primary js-tooltip" title="" data-original-title="">BACK</button>
+                <p></p>
+                </form>
+            </div>
         </dt>
 
+
+        <dt>
+            <form  action="/admin/myapp/repayment/get/" method="post"  class="form-horizontal" novalidate="">{% csrf_token %}
+                <fieldset>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            Size of Payments
+                                        </div>
+                                        <div class="col-sm-6 col-sm-offset-4">
+                                            <input name="sizepay" class="form-control" type="text" value="">
+                                        </div>
+                                    </div>
+                                    <div class="row offset-4">
+                                        <button class="btn btn-primary js-tooltip" title="" data-original-title="">GET PAYMENT</button>
+
+                                            <p></p>
+                                    </div>
+                </fieldset>
+            </form>
+        </dt>
+        <dt>
+            <h1>{{ result.message }}</h1>
+        </dt>
 
 
     </dl>
