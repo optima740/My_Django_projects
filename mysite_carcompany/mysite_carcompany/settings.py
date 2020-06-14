@@ -27,7 +27,28 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
+# for GDAL:
+"""
+import os
+if os.name == 'nt':
+    import platform
+    OSGEO4W = r"/OSGeo4W"
+    #if '64' in platform.architecture()[0]:
+        #OSGEO4W += "64"
+    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+    os.environ['OSGEO4W_ROOT'] = OSGEO4W
+    os.environ['GDAL_DATA'] = OSGEO4W + r"\share\gdal"
+    os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
+    os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
+"""
 
+VENV_BASE = os.environ['VIRTUAL_ENV']
+os.environ['PATH'] = os.path.join(VENV_BASE, 'Lib/site-packages/osgeo') + ';' + os.environ['PATH']
+os.environ['PROJ_LIB'] = os.path.join(VENV_BASE, 'Lib/site-packages/osgeo/data/proj') + ';' + os.environ['PATH']
+#GDAL_LIBRARY_PATH = '/Users/Andrey/PycharmProjects/untitled/venv/Lib/site-packages/django/contrib/gis/gdal/libgdal.py'
+GEOS_LIBRARY_PATH = 'C:/Users/Andrey/PycharmProjects/untitled/venv/Lib/site-packages/osgeo/geos_c.dll'
+GDAL_LIBRARY_PATH = 'C:/Users/Andrey/PycharmProjects/untitled/venv/Lib/site-packages/osgeo/gdal300.dll'
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,6 +62,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'reset_migrations',
     'crispy_forms',
+    'django.contrib.gis',
 
 ]
 
@@ -84,10 +106,11 @@ WSGI_APPLICATION = 'mysite_carcompany.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 
 # Password validation
@@ -114,13 +137,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE = 'UTC'
+USE_TZ = True
 
 USE_I18N = True
 
-USE_L10N = True
+#USE_L10N = True
 
-USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -128,7 +152,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+DATE_FORMAT = "Y-m-d"
+USE_L10N = False
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.

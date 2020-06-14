@@ -16,9 +16,10 @@
                         <!-- Итерация списка автомобилей -->
                         {% for item in result %}
                             <div class="col-md-10">
-                                <p>ID: {{ item.id }} - {{ item.brand }} {{ item.model }} - Цвет: {{ item.color }}  </p>
+                                <p>ID: {{ item.id }} - {{ item.brand }} {{ item.model }} - Цвет: {{ item.color }} Дата покупки: {{ item.date_of_buy }} </p>
                             </div>
                         {% endfor %}
+
                     <!-- Пагинация -->
                         <div class="col-md-10 text-center">
                             {% if result.has_previous %}

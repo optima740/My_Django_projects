@@ -1,21 +1,28 @@
+import time
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models as model_gis
+import datetime
+from django.utils.timezone import now, pytz
 
 class Enterprise(models.Model):
+    TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
     title = models.CharField(max_length=32)
     address = models.CharField(max_length=64)
+    time_zone = models.CharField(max_length=32, choices=TIMEZONES, default='UTC')
 
     def __str__(self):
-        return '%s, %s' % (self.title, self.address)
+        return '%s, %s, %s' % (self.title, self.address, self.time_zone)
 
 class Car(models.Model):
     brand = models.CharField(max_length=32)
     model = models.CharField(max_length=32)
     color = models.CharField(max_length=16)
     fuel_util = models.CharField(max_length=5)
-    date_assembly = models.DateField(auto_now_add=True)
+    date_of_buy = models.DateTimeField(auto_now=True)
     of_enterprise = models.ForeignKey('Enterprise', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
@@ -53,3 +60,11 @@ class Manager(User):
     of_enterprise = models.ForeignKey('Enterprise', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return '%s, %s, %s' % (self.first_name, self.last_name, self.of_enterprise)
+
+class Trip(model_gis.Model):
+    # поездка, привязана к автомобилю
+    geo_data = models.FileField(upload_to='geo_tracks/%Y/%m/%d', null=True, blank=True,)
+    begin_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    save_time = models.DateTimeField(auto_now=True)
+    to_car = models.ForeignKey('Car', on_delete=models.SET_NULL, null=True)

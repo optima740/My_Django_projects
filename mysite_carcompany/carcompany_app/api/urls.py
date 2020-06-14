@@ -10,6 +10,7 @@ urlpatterns = [
     #path('cars/<int:pk>', views.SingleCarView.as_view(), name='SingleCarView'),
 
     url(r'^enterprise/$', views.EnterpriseView.as_view(), name='EnterpriseListView'),
+    url(r'^trip/$', views.TripView.as_view(), name='TripView'),
 
     #url(r'^cars/$', views.CarDetailView.as_view(), name='CarDetailView'),
     # обработчик пути для cars

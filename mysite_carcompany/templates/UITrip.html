@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+{% block content %}
+    <div class="col-md-10">
+                    <form  action="/api/trip/" method="post"  class="form-horizontal" novalidate="">{% csrf_token %}
+                        <p>
+                            <label for="localdate">Дата и время: </label>
+                            <input type="datetime-local" id="localdate" name="date"/>
+                        </p>
+                        <p>
+                            <button type="submit">Отправить</button>
+                        </p>
+                    </form>
+        <p>RESULT: {{result}}</p>
+        <p>_____________________________________________________________</p>
+        {% for data in result %}
+            <p>{{ data.geo_data }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
