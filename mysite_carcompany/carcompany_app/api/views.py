@@ -1,3 +1,5 @@
+import os
+
 from rest_framework import generics, request
 from rest_framework.generics import get_object_or_404, ListCreateAPIView
 from rest_framework.response import Response
@@ -14,6 +16,8 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import *
 from django.core.files import File
+import pandas as pd
+from rest_framework.renderers import JSONRenderer
 
 class CarView(LoginRequiredMixin, ListCreateAPIView):
     # представление для списка авто с методами create и get
@@ -149,6 +153,26 @@ class EnterpriseView(LoginRequiredMixin, ListCreateAPIView):
 
     raise_exception = True
 
+class MakeTrack():
+    # Класс содержит дату и id. В методе get_data преобразует дату и id в путь к файлу.
+
+    def __init__(self, date, car_id):
+        self.date = date # диапазон дат
+        self.car_id = car_id
+
+    def get_data(self):
+        # метод возвращает содержимое файла.
+        # если файла нет по текущему пути, возвращает None.
+        date = self.date.replace("-", "/")
+        path_to_file = 'geo_tracks/' + str(date) + '/' + str(self.car_id) + '.txt'
+        all_path = os.path.join(settings.MEDIA_ROOT, path_to_file)
+        if os.path.exists(all_path):
+            # файл существует
+            with open(all_path, 'r') as file:
+                datа_from_file = str([row.strip() for row in file])
+            return datа_from_file
+
+
 class TripView(LoginRequiredMixin, ListCreateAPIView):
     serializer_class = TripSerialazer
     renderer_classes = [TemplateHTMLRenderer]
@@ -156,41 +180,57 @@ class TripView(LoginRequiredMixin, ListCreateAPIView):
 
     def get_queryset(self):
         queryset = Trip.objects.all()
-
         trip = queryset
-        #trip = queryset.filter(begin_time__gte=self.request.GET.get('date'))
-
-        #trip = Trip.objects.filter(begin_time=str(self.request.POST.get('date')))
         return trip
     queryset = get_queryset
+
+    def date_range(self, date_begin, date_end):
+        # возвращает список дат из переданного диапазона begin -- end.
+        daterange = pd.date_range(date_begin, date_end)
+        date_format = []
+        for i in daterange:
+            date_format.append(i.date().isoformat()) # извлекаем date формат
+        return date_format
+
+    def agg_geodata(self, daterange, car_id):
+        # агрегирует данные которые возвращает объект MakeTrack, обращаяс к файлу
+        agg_track = []
+        key = 'car_id ' + str(car_id)
+        value = 'no data matching the current period'
+        if len(daterange) != 0:
+            for date in daterange:
+                track = MakeTrack(date, car_id).get_data()
+                if track is not None:
+                    agg_track.append(track)
+        if len(agg_track) != 0:
+            key = 'car_id ' + str(car_id)
+            value = ''.join(agg_track)
+            value = value.replace('[', '').replace(']', '').replace('\'', '')
+        return {key: value}
+
     def post(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        #time = request.POST.get('date')
-        qurey_trip = Trip.objects.filter(end_time__gte=request.POST.get('date'))
-        trip = qurey_trip.filter(begin_time__lte=request.POST.get('date'))
-        paths = []
-        for i in trip:
-            paths.append(i.geo_data)
-        if len(paths) != 0:
-            path_to_file = 'media/' + str(paths[0])
-            with open(path_to_file, 'r') as file:
-                geodate = [row.strip() for row in file]
+        geo_data = 'no data matching the current query'
+        date_begin = request.POST.get('date_begin')
+        date_end = request.POST.get('date_end')
+        date_begin = date_begin[0:10]
+        date_end = date_end[0:10]
+        car_id = request.POST.get('car_id')
+        if date_end != '' and date_begin != '' and car_id != '':
+            daterange = self.date_range(date_begin, date_end) # получаем диапазон дат
+            geo_data = self.agg_geodata(daterange, car_id) # получаем словарь, где key - car_id, value - данные из файлов
+                                                       # по данному car_id
+        return Response({'result': geo_data})
 
-        else:
-            geodate = 'No date'
-        #serializer = TripSerialazer(trip, many=True)
-
-
-        # with open(Trip.geo_data) as file:
-        # str = [row.strip() for row in file]
-        # file.closed
-
-        return Response({'result': geodate})
 
     def get(self, request):
+
         return Response(locals())
 
     raise_exception = True
+
+
+
+
 
 class CarDetailView(LoginRequiredMixin, generics.ListAPIView, ListModelMixin):
     queryset = Car.objects.all()

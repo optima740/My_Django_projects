@@ -165,6 +165,11 @@ REST_FRAMEWORK = {
     # глобальная настройка для стиля пагинации с указанием количества элементов на странице PAGE_SIZE
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
+    # глобальная настройка для рендера json формата
 }
 LOGIN_REDIRECT_URL = '/api/cars/'
 #LOGIN_URL = '/api/cars/'
